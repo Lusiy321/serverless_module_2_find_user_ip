@@ -13,10 +13,10 @@ fs.createReadStream("src/ip.csv")
     ipData.push(row);
   })
   .on("end", () => {
-    console.log("loaded.");
+    console.log("File loaded.");
   });
 
-app.get("/", async (req: any, res: any) => {
+app.get("/get-ip", async (req: any, res: any) => {
   const userIP = req.headers["x-forwarded-for"];
 
   async function ipToNumber(ip: any) {
@@ -36,7 +36,7 @@ app.get("/", async (req: any, res: any) => {
       const endIP = parseInt(row["16777215"], 10);
       return userIPInt > startIP && userIPInt < endIP;
     });
-    console.log(ipInfo);
+
     if (ipInfo !== undefined) {
       const country = ipInfo["-"];
       const ip = userIP;
@@ -51,6 +51,11 @@ app.get("/", async (req: any, res: any) => {
 const port = 3000;
 app.listen(port, async () => {
   console.log(`Server is running http://localhost:${port}`);
+});
+app.get("/", async (req: any, res: any) => {
   const publicUrl = await ngrok.connect(port);
-  console.log(`Public URL: ${publicUrl}`);
+  console.log(`Public URL: ${publicUrl}/get-ip`);
+  res.send(
+    `<h1>Click to get you IP:</h1> <a href="${publicUrl}/get-ip">Visit to Click!</a>`
+  );
 });
