@@ -8,7 +8,7 @@ import path from "path";
 const app = express();
 
 const ipData: any = [];
-fs.createReadStream(path.join(__dirname, "src/ip.csv"))
+fs.createReadStream(path.resolve(__dirname, "src", "ip.csv"))
   .pipe(csv())
   .on("data", (row: any) => {
     ipData.push(row);
