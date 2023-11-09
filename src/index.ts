@@ -3,11 +3,12 @@ import csv from "csv-parser";
 import fs from "fs";
 
 import ngrok from "ngrok";
+import path from "path";
 
 const app = express();
 
 const ipData: any = [];
-fs.createReadStream("src/ip.csv")
+fs.createReadStream(path.join(__dirname, "src/ip.csv"))
   .pipe(csv())
   .on("data", (row: any) => {
     ipData.push(row);
