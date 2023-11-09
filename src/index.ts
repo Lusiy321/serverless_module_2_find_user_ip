@@ -18,16 +18,17 @@ fs.createReadStream("src/ip.csv")
 
 app.get("/", async (req: any, res: any) => {
   const userIP = req.headers["x-forwarded-for"];
-  // const userIP = "134.238.141.12";
+
   async function ipToNumber(ip: any) {
     const parts = ip.split(".").map(Number);
     return (
       parts[0] * 256 ** 3 + parts[1] * 256 ** 2 + parts[2] * 256 + parts[3]
     );
   }
+
   const convertIp = await ipToNumber(userIP);
 
-  async function findCountryByIP(ipData: [], convertIp: number) {
+  async function findCountry(ipData: [], convertIp: number) {
     const userIPInt = convertIp;
 
     const ipInfo = ipData.find((row: any) => {
@@ -44,7 +45,7 @@ app.get("/", async (req: any, res: any) => {
       return res.json({ country: "Unknown", IP: userIP });
     }
   }
-  await findCountryByIP(ipData, convertIp);
+  await findCountry(ipData, convertIp);
 });
 
 const port = 3000;
